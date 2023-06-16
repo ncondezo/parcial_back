@@ -37,6 +37,9 @@
 		<module>
 			api-gateway
 		</module>
+		<module>
+			api-serie
+		</module>
 
 
 
