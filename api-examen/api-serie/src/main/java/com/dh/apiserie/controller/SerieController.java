@@ -2,6 +2,7 @@ package com.dh.apiserie.controller;
 
 import com.dh.apiserie.model.Serie;
 import com.dh.apiserie.service.SerieService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +25,10 @@ public class SerieController {
         return ResponseEntity.ok(serieService.getSeriesBygGenre(genre));
     }
 
-    @PostMapping
-    void createNewSerie(@RequestBody Serie serie) {
-         serieService.createSerie(serie);
+    @PostMapping("/save")
+    public ResponseEntity<String>saveSerie(@RequestBody Serie serie){
+        String movieId = serieService.save(serie);
+        return ResponseEntity.status(HttpStatus.CREATED).body(movieId);
     }
 
 }

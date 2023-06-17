@@ -6,6 +6,7 @@ import com.dh.catalog.client.SerieServiceClient;
 
 import com.dh.catalog.model.movie.Movie;
 import com.dh.catalog.service.MovieService;
+import com.dh.catalog.service.SerieService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +18,12 @@ public class CatalogController {
 
 	private final MovieService movieService;
 
-	private final SerieServiceClient serieServiceClient;
+	private final SerieService serieService;
 
 
-	public CatalogController(MovieService movieService, SerieServiceClient serieServiceClient) {
+	public CatalogController(MovieService movieService, SerieService serieService) {
 		this.movieService = movieService;
-		this.serieServiceClient = serieServiceClient;
+		this.serieService = serieService;
 	}
 
 	@GetMapping("/movies/{genre}")
@@ -33,16 +34,21 @@ public class CatalogController {
 
 	@GetMapping("/series/{genre}")
 	ResponseEntity<List<SerieServiceClient.SeriesDto>> getSeriesGenre(@PathVariable String genre) {
-		return ResponseEntity.ok(serieServiceClient.getSeriesByGenre(genre));
+		return ResponseEntity.ok(serieService.getSeriesByGenre(genre));
 
 
 	}
 
-	@PostMapping
+	@PostMapping("/movies")
 	ResponseEntity<Long> saveMovie(@RequestBody MovieServiceClient.MovieDto movie) {
 		Long movieId = movieService.save(movie);
 		return ResponseEntity.ok(movieId);
 		//return ResponseEntity.ok().body(movieService.save(movie));
+	}
+	@PostMapping("/series")
+	ResponseEntity<String> saveSeries(@RequestBody SerieServiceClient.SeriesDto serie){
+		String serieId = serieService.save(serie);
+		return ResponseEntity.ok(serieId);
 	}
 
 

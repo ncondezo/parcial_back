@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -37,8 +40,16 @@ public class MovieService {
         return movies;
     }
 
-    public List<MovieServiceClient.MovieDto> findMoviesFallBack(String genre, Throwable t) throws Exception {
-        throw new Exception("No movies found.");
+    public List<MovieServiceClient.MovieDto> findMoviesFallBack(String genre, Throwable t)  {
+        var movie_error = new MovieServiceClient.MovieDto();
+        movie_error.setId(999L);
+        movie_error.setName("El rey leoón");
+        movie_error.setGenre("Animada");
+        movie_error.setUrlStream("API-MOVIE UNAVAILABLE");
+        var lista_hardcodeada = new ArrayList<MovieServiceClient.MovieDto>();
+        lista_hardcodeada.add(movie_error);
+
+        return lista_hardcodeada;
     }
 
     /*
@@ -54,6 +65,7 @@ public class MovieService {
 
     }   */
 
+
     @Transactional
     public Long save(MovieServiceClient.MovieDto movie) {
         try {
@@ -62,6 +74,7 @@ public class MovieService {
             return saveMovieFallback(movie, e);
         }
     }
+    @Retry(name = "retryMovieSave")
     @CircuitBreaker(name = "saveMovie", fallbackMethod = "saveMovieFallback")
     private Long executeSave(MovieServiceClient.MovieDto movie) {
         ResponseEntity<Long> response = movieServiceClient.save(movie);
@@ -73,10 +86,10 @@ public class MovieService {
     }
 
     private Long saveMovieFallback(MovieServiceClient.MovieDto movie, Throwable t) {
-        // Implementa aquí la lógica de fallback en caso de fallo
+        // Implementar  lógica de fallback
         // ...
 
-        return 666L ; // Devuelve un valor de fallback apropiado
+        return 7777777777L ; // Devuelve un valor de fallback apropiado
     }
 
 

@@ -23,7 +23,14 @@ public class SerieService {
         return repository.findAllByGenre(genre);
     }
 
-    public Serie createSerie(Serie serieDto) {
-        return repository.save(serieDto);
+    //public Serie createSerie(Serie serieDto) {return repository.save(serieDto);}
+
+    public String save(Serie s){
+        var serie = new Serie();
+        serie.setGenre(s.getGenre());
+        serie.setName(s.getName());
+        serie.setSeasons(s.getSeasons());
+        Serie savedSerie = repository.save(serie);
+        return savedSerie.getId();
     }
 }
