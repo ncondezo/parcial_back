@@ -21,7 +21,16 @@ public class MovieService {
         return movieRepository.findByGenre(genre);
     }
 
-    public Movie save(Movie movie) {
+    /*public Movie save(Movie movie) {
         return movieRepository.save(movie);
+
+    }*/
+    public Long save(Movie m){
+        var movie = new Movie();
+        movie.setGenre(m.getGenre());
+        movie.setName(m.getName());
+        movie.setUrlStream(m.getUrlStream());
+        Movie savedMovie = movieRepository.save(movie);
+        return savedMovie.getId();
     }
 }

@@ -2,11 +2,12 @@ package com.dh.catalog.controller;
 
 import com.dh.catalog.client.MovieServiceClient;
 
+import com.dh.catalog.client.SerieServiceClient;
+
+import com.dh.catalog.model.movie.Movie;
+import com.dh.catalog.service.MovieService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,15 +15,35 @@ import java.util.List;
 @RequestMapping("/api/v1/catalog")
 public class CatalogController {
 
-	private final MovieServiceClient movieServiceClient;
+	private final MovieService movieService;
 
-	public CatalogController(MovieServiceClient movieServiceClient) {
-		this.movieServiceClient = movieServiceClient;
+	private final SerieServiceClient serieServiceClient;
+
+
+	public CatalogController(MovieService movieService, SerieServiceClient serieServiceClient) {
+		this.movieService = movieService;
+		this.serieServiceClient = serieServiceClient;
 	}
 
-	@GetMapping("/{genre}")
-	ResponseEntity<List<MovieServiceClient.MovieDto>> getGenre(@PathVariable String genre) {
-		return ResponseEntity.ok(movieServiceClient.getMovieByGenre(genre));
+	@GetMapping("/movies/{genre}")
+	ResponseEntity<List<MovieServiceClient.MovieDto>> getMoviesGenre(@PathVariable String genre) {
+
+		return ResponseEntity.ok(movieService.findByGenre(genre));
 	}
+
+	@GetMapping("/series/{genre}")
+	ResponseEntity<List<SerieServiceClient.SeriesDto>> getSeriesGenre(@PathVariable String genre) {
+		return ResponseEntity.ok(serieServiceClient.getSeriesByGenre(genre));
+
+
+	}
+
+	@PostMapping
+	ResponseEntity<Long> saveMovie(@RequestBody MovieServiceClient.MovieDto movie) {
+		Long movieId = movieService.save(movie);
+		return ResponseEntity.ok(movieId);
+		//return ResponseEntity.ok().body(movieService.save(movie));
+	}
+
 
 }
