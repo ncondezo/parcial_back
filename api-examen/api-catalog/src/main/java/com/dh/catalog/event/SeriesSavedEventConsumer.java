@@ -24,7 +24,7 @@ public class SeriesSavedEventConsumer {
     public void listen(SeriesSavedEventConsumer.Data message){
         seriesMongoService.save(message);
 
-        //System.out.println("Series info: " + message.toString());
+
 
     }
     @NoArgsConstructor
