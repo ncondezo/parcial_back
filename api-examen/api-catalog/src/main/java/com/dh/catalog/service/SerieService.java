@@ -1,7 +1,9 @@
 package com.dh.catalog.service;
 
-import com.dh.catalog.client.MovieServiceClient;
 import com.dh.catalog.client.SerieServiceClient;
+import com.dh.catalog.mapper.SeriesMapper;
+import com.dh.catalog.model.serie.Serie;
+import com.dh.catalog.repository.SerieRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.http.HttpStatus;
@@ -16,9 +18,16 @@ public class SerieService {
 
     private final SerieServiceClient serieServiceClient;
 
+    private final SerieRepository serieRepository;
 
-    public SerieService(SerieServiceClient serieServiceClient) {
+    private final SeriesMapper seriesMapper;
+
+
+    public SerieService(SerieServiceClient serieServiceClient, SerieRepository serieRepository, SeriesMapper seriesMapper) {
         this.serieServiceClient = serieServiceClient;
+
+        this.serieRepository = serieRepository;
+        this.seriesMapper = seriesMapper;
     }
 
     @Retry(name = "retrySeriesSearch")
@@ -28,15 +37,14 @@ public class SerieService {
         return series;
     }
     public List<SerieServiceClient.SeriesDto> findSeriesFallBack(String genre, Throwable t)  {
-        var serie = new SerieServiceClient.SeriesDto();
-        serie.setId("API-SERIES UNAVAILABLE");
-        serie.setName("API-SERIES UNAVAILABLE");
-        serie.setGenre("---------------------");
-        serie.setSeasons(new ArrayList<>());
-        var lista = new ArrayList<SerieServiceClient.SeriesDto>();
-        lista.add(serie);
+        var series = serieRepository.findAllByGenre(genre);
+        var seriesDtos = new ArrayList<SerieServiceClient.SeriesDto>();
+        for (Serie s : series){
+            SerieServiceClient.SeriesDto serieDto = seriesMapper.mapToDto(s);
+            seriesDtos.add(serieDto);
+        }
 
-        return lista;
+        return seriesDtos;
     }
 
     public String save(SerieServiceClient.SeriesDto series) {

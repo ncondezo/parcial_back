@@ -2,7 +2,6 @@ package com.dh.catalog.service;
 
 import com.dh.catalog.client.MovieServiceClient;
 import com.dh.catalog.mapper.MovieMapper;
-import com.dh.catalog.mapper.MovieMapperImpl;
 import com.dh.catalog.model.movie.Movie;
 import com.dh.catalog.repository.MovieRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -24,13 +21,17 @@ public class MovieService {
     private final MovieServiceClient movieServiceClient;
     private final MovieRepository movieRepository;
 
-    private MovieMapper movieMapper = new MovieMapperImpl();
+    private final MovieMapper movieMapper;
 
-    public MovieService(MovieServiceClient movieServiceClient, MovieRepository movieRepository) {
+
+
+    public MovieService(MovieServiceClient movieServiceClient, MovieRepository movieRepository, MovieMapper movieMapper) {
         this.movieServiceClient = movieServiceClient;
 
         this.movieRepository = movieRepository;
+        this.movieMapper = movieMapper;
     }
+
 
 
     @Retry(name = "retryMovieSearch")
@@ -40,7 +41,18 @@ public class MovieService {
         return movies;
     }
 
-    public List<MovieServiceClient.MovieDto> findMoviesFallBack(String genre, Throwable t)  {
+    public List<MovieServiceClient.MovieDto> findMoviesFallBack(String genre, Throwable t) {
+        var movies = movieRepository.findAllByGenre(genre);
+        var movieDtos = new ArrayList<MovieServiceClient.MovieDto>();
+        for (Movie m : movies) {
+            MovieServiceClient.MovieDto movieDto = movieMapper.mapToDto(m);
+            movieDtos.add(movieDto);
+        }
+
+        return movieDtos;
+    }
+
+    /*public List<MovieServiceClient.MovieDto> findMoviesFallBack(String genre, Throwable t)  {
         var movie_error = new MovieServiceClient.MovieDto();
         movie_error.setId(999L);
         movie_error.setName("El rey leoón");
@@ -50,7 +62,7 @@ public class MovieService {
         lista_hardcodeada.add(movie_error);
 
         return lista_hardcodeada;
-    }
+    }*/
 
     /*
     @Transactional

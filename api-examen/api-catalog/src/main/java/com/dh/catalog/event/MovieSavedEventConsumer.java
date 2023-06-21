@@ -1,20 +1,28 @@
 package com.dh.catalog.event;
 
 import com.dh.catalog.config.RabbitMQConfig;
+import com.dh.catalog.model.movie.Movie;
+import com.dh.catalog.service.MovieMongoService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MovieSavedEventConsumer {
 
+    private final MovieMongoService movieMongoService;
+
+    public MovieSavedEventConsumer(MovieMongoService movieMongoService) {
+        this.movieMongoService = movieMongoService;
+    }
+
     @RabbitListener(queues = RabbitMQConfig.QUEUE_MOVIE_SAVED)
     public void listen(MovieSavedEventConsumer.Data message){
-        System.out.println("Movie info: " + message);
+        movieMongoService.save(message);
+        //System.out.println("Movie info: " + message);
 
 
     }
