@@ -1,18 +1,21 @@
 package com.dh.catalog.model.movie;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
 
 @Document(collection = "Movie")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Movie {
+
 
     @Id
     private String id;
@@ -20,3 +23,5 @@ public class Movie {
     private String genre;
 
 }
+
+

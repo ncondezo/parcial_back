@@ -22,8 +22,6 @@ public class MovieSavedEventConsumer {
     @RabbitListener(queues = RabbitMQConfig.QUEUE_MOVIE_SAVED)
     public void listen(MovieSavedEventConsumer.Data message){
         movieMongoService.save(message);
-        //System.out.println("Movie info: " + message);
-
 
     }
 

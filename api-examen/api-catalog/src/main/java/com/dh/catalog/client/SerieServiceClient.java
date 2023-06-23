@@ -1,6 +1,7 @@
 package com.dh.catalog.client;
 
 import com.dh.catalog.model.serie.Season;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -19,12 +20,10 @@ public interface SerieServiceClient {
     @GetMapping("/api/v1/series/{genre}")
     List<SerieServiceClient.SeriesDto> getSeriesByGenre(@PathVariable(value = "genre") String genre);
 
-    @PostMapping("/api/v1/series/save")
-    ResponseEntity<String> save(@RequestBody SeriesDto series);
-
 
     @Getter
     @Setter
+    @Builder
     class SeriesDto{
         private String id;
         private String name;
