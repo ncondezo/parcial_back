@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "6f8f5c07-1fea-40b5-89c0-606787231b8c",
+		"name": "Final",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23526204"
+	},
+	"item": [
+		{
+			"name": "CatalogGet",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8089/api/v1/catalog/Drama",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"v1",
+						"catalog",
+						"Drama"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MoviePost",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \r\n    \"name\": \"Joker\",\r\n    \"genre\":\"Drama\",\r\n    \"urlStream\":\"www.netflix.com/joker\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8089/api/v1/movies/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"v1",
+						"movies",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SeriesPost",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Severance\",\r\n    \"genre\":\"Drama\",\r\n    \"seasons\":[\r\n        {\r\n            \"seasonNumber\":1,\r\n            \"chapters\":[\r\n                {\"name\":\"The we we are\",\r\n                \"number\":9,\r\n                \"urlStream\":\"pending\"}\r\n            ]\r\n\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8089/api/v1/series/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"v1",
+						"series",
+						"save"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
