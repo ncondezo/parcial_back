@@ -2,10 +2,7 @@ package com.dh.apiserie.event;
 
 import com.dh.apiserie.config.RabbitMQConfig;
 import com.dh.apiserie.model.Season;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +27,7 @@ public class SeriesSavedEventProducer {
     @AllArgsConstructor
     @Getter
     @Setter
+    @Builder
     public static class Data{
         private String name;
         private String genre;

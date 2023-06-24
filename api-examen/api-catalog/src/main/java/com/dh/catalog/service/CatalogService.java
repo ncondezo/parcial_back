@@ -16,26 +16,22 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CatalogService {
-
+    @Lazy
+    @Autowired
+    private CatalogService self;
     private final MovieServiceClient movieServiceClient;
     private final SerieServiceClient serieServiceClient;
     private final MovieRepository movieRepository;
     private final SerieRepository serieRepository;
 
 
-    @Lazy
-    @Autowired
-    private CatalogService self;
-
     public CatalogDto getAllByGenre (String genre){
-
         var movieList = self.findByGenre(genre);
         var seriesList = self.getSeriesByGenre(genre);
-        var catalogDto = new CatalogDto();
-        catalogDto.setMovies(movieList);
-        catalogDto.setSeries(seriesList);
-
-        return catalogDto;
+        return CatalogDto.builder()
+                .movies(movieList)
+                .series(seriesList)
+                .build();
     }
 
     @Retry(name = "retryMovieSearch")
@@ -50,19 +46,20 @@ public class CatalogService {
     }
     private MovieServiceClient.MovieDto mapToMovie(Movie movie){
         return MovieServiceClient.MovieDto.builder()
-                .id(Long.parseLong(movie.getId().replaceAll("[^0-9]", "").substring(0, Math.min(10, movie.getId().length())))) // PARA QUE EL CAMPO DE ID NO DEVUELVA NULL---
+                .id(Long.parseLong(
+                        movie.getId()
+                                .replaceAll("[^0-9]", "")
+                                .substring(0, Math.min(10, movie.getId().length()))))   // PARA QUE EL CAMPO DE ID NO DEVUELVA NULL
                 .name(movie.getName())
                 .genre(movie.getGenre())
-                .urlStream("Retrieved from API-CATALOG.")
+                .urlStream(" --- Retrieved from API-CATALOG. --- ")
                 .build();
     }
-
 
     @Retry(name = "retrySeriesSearch")
     @CircuitBreaker(name = "seriesFindBy", fallbackMethod = "findSeriesFallBack")
     public List<SerieServiceClient.SeriesDto> getSeriesByGenre(String genre) {
-        var series = serieServiceClient.getSeriesByGenre(genre);
-        return series;
+        return serieServiceClient.getSeriesByGenre(genre);
     }
 
     public List<SerieServiceClient.SeriesDto> findSeriesFallBack(String genre, Throwable t)  {

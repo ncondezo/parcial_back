@@ -1,6 +1,7 @@
 package com.dh.movie.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class Movie implements Serializable {
 
     private static final long serialVersionUID = 1L;

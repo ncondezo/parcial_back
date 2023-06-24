@@ -12,13 +12,11 @@ import java.util.List;
 @RequestMapping("/api/v1/series")
 public class SerieController {
 
-    private SerieService serieService;
+    private final SerieService serieService;
 
     public SerieController(SerieService serieService) {
         this.serieService = serieService;
     }
-
-
 
     @GetMapping("/{genre}")
     ResponseEntity<List<Serie>> getSerieByGenre(@PathVariable String genre){

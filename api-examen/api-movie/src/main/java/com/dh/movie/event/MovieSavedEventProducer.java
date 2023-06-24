@@ -1,10 +1,7 @@
 package com.dh.movie.event;
 
 import com.dh.movie.config.RabbitMQConfig;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +20,7 @@ public class MovieSavedEventProducer {
     @NoArgsConstructor
     @Getter
     @Setter
+    @Builder
     public static class Data{
 
         private String name;

@@ -14,11 +14,11 @@ public class SeriesMongoService {
         this.serieRepository = serieRepository;
     }
 
-    public void save(SeriesSavedEventConsumer.Data message){
-        var series = new Serie();
-        series.setName(message.getName());
-        series.setGenre(message.getGenre());
-        series.setSeasons(message.getSeasons());
-        serieRepository.save(series);
+    public void save (SeriesSavedEventConsumer.Data message){
+        serieRepository.save(Serie.builder()
+                .name(message.getName())
+                .genre(message.getGenre())
+                .seasons(message.getSeasons())
+                .build());
     }
 }

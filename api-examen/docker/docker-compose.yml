@@ -12,6 +12,38 @@ services:
       - '3306:3306'
     expose:
       - '3306'
+  mongo-container:
+    image: mongo
+    container_name: mongo-catalog
+    restart: on-failure
+    environment:
+      MONGO_INITDB_DATABASE: 'catalog'
+      MONGO_INITDB_ROOT_USERNAME: 'usr-catalog'
+      MONGO_INITDB_ROOT_PASSWORD: 'pwd-catalog'
+    ports:
+      - '27018:27017'
+      - '2018'
+
+    volumes:
+      - ./mongo-init-catalog.js:/docker-entrypoint-initdb.d/mongo-init-catalog.js:ro
+
+
+
+  mongo-series:
+    image: mongo
+    container_name: mongo-series
+    restart: on-failure
+    environment:
+      MONGO_INITDB_DATABASE: 'series'
+      MONGO_INITDB_ROOT_USERNAME: 'usr-serie'
+      MONGO_INITDB_ROOT_PASSWORD: 'pwd-serie'
+    ports:
+      - '27019:27017'
+    expose:
+      - '27019'
+
+    volumes:
+      - ./mongo-init-series.js:/docker-entrypoint-initdb.d/mongo-init-series.js:ro
 
   zipkin-server-container:
     image: openzipkin/zipkin-slim
